@@ -22,6 +22,7 @@ function HomePage() {
   const { data: signer, isError, isLoading } = useSigner()
   const provider = useProvider();
   const [Active, setActive] = useState(true);
+  const [loading, setIsLoading] = useState(false)
 
   const [myaddress, setMyaddress] = useState()
   // const [poolId, setPoolId] = useState(1)
@@ -54,6 +55,8 @@ function HomePage() {
     stakingAbi,
     provider,
   )
+
+
 
   function refreshData (signer) {
     if(signer){
@@ -114,6 +117,21 @@ function HomePage() {
     }
   }
   
+
+
+  useEffect(() => {
+    if(poolDetails.length > 0){
+      setIsLoading(true)
+    }  
+
+    console.log('rendererrererer')
+
+  }, [poolDetails])
+        
+
+
+
+
   async function getPoolLength() {
     const length = await staking.poolLength()
     return (Number(length))
@@ -122,8 +140,12 @@ function HomePage() {
   // console.log("length is",getPoolLength());
 
   useEffect( ()=>{
-    refreshData(signer)
-  },[provider, signer])
+    refreshData(signer);
+
+  },[provider, signer]);
+
+
+
 
   return (
     <div className='HomePage'>
@@ -132,7 +154,7 @@ function HomePage() {
           <div className='home__topLeft'>
             <div className='home__topTitle'>Provide Liquidity, Earn FTR</div>
             <div className='home__topAmount'>$105,786,890.44</div>
-            <div className='home__topDesc'>Total alue Locked(TVL)</div>
+            <div className='home__topDesc'>Total Value Locked(TVL)</div>
             <div className='home__topSearch'>
               <div className='home__topSearchBox'>
                 <div className='home__topSearchIcon'>
@@ -165,8 +187,8 @@ function HomePage() {
               <div className={'home__bottomOption '+(!Active ? 'home--active' : '')} onClick={()=>setActive(!Active)}>Ended</div>
             </div>
           </div>
+          {loading ? 
           <div className='home__bottomGrid'>
-          
             {Active ?
             poolDetails.filter(pool => pool.value.poolActive).map((pool, index) => <Card key={index} index={index} Active = {Active} poolData = {pool.value} />)
             //   <>
@@ -184,7 +206,14 @@ function HomePage() {
               //   <Card Active={ Active}/>
               // </>
             }
+
+
+          </div> 
+          : 
+          <div className='loaderOuter' >
+          <div className="loader"></div>
           </div>
+        }
           
 
         </div>

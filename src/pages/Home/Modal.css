@@ -3,7 +3,7 @@
   background-color: rgba(0, 0, 0, 0.5);
   width: 100vw;
   height: 100vh;
-  z-index: 0;
+  z-index: 10;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -23,7 +23,7 @@ position: relative;
 flex-direction: column;
 background: #203A62;
   color: white;
-  z-index: 10;
+  z-index: 10000 !important;
   border-radius: 16px;
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
 }

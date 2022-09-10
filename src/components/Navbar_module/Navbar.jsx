@@ -56,6 +56,7 @@ const Navbar = () => {
   const [isOpen, setOpen] = useState(false);
 const [active, setActive] = useState("1");
 
+
   const handleClick = (event) => {
     setActive(event.target.id);
   };
