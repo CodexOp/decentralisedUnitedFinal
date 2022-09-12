@@ -12,50 +12,10 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 
 
 function App() {
-  const BSCTestnetChain = {
-    id: 97,
-    name: "BSC test",
-    network: "BSC test",
-    iconUrl: "https://www.logo.wine/a/logo/Binance/Binance-Icon-Logo.wine.svg",
-    iconBackground: "#fff",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Binance Smart Chain",
-      symbol: "BNB",
-    },
-    rpcUrls: {
-      default: "https://bsctestapi.terminet.io/rpc",
-    },
-    blockExplorers: {
-      default: { name: "SnowTrace", url: "https://bscscan.com" },
-      etherscan: { name: "SnowTrace", url: "https://bscscan.com" },
-    },
-    testnet: true,
-  };
 
-  const Avaxchain = {
-    id: 43114,
-    name: "Avalanche Network",
-    network: "Avalanche Network",
-    iconUrl: "https://cryptologos.cc/logos/avalanche-avax-logo.png",
-    iconBackground: "#fff",
-    nativeCurrency: {
-      decimals: 18,
-      name: "Avalanche",
-      symbol: "AVAX",
-    },
-    rpcUrls: {
-      default: "https://rpc.ankr.com/avalanche",
-    },
-    blockExplorers: {
-      default: { name: "SnowTrace", url: "https://snowtrace.io/" },
-      etherscan: { name: "SnowTrace", url: "https://snowtrace.io/" },
-    },
-    testnet: false,
-  };
-
+  
   const { chains, provider } = configureChains(
-    [Avaxchain, BSCTestnetChain, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+    [ chain.rinkeby, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
     [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
   );
 
