@@ -203,18 +203,20 @@ function Card({
     if(walletAddressInfo){
       try{
         let staking = new ethers.Contract(value.stakingAddress, stakingAbi, signer);
+        const token = new ethers.Contract(poolData.tokenAddress, tokenAbi, signer);
+
         if(amount === undefined){
           alert("Enter Amount First")
         }
         else{
           await approve()
-          let _amount = ethers.utils.parseEther(amount);
+          let _amount = ethers.utils.parseUnits(amount, (await token.decimals()).toString());
           // console.log (_amount)
           let tx = await staking.stakeTokens(index, _amount);
           let reciept = await tx.wait();
           console.log ("Stake Tx Receipt: ", reciept);
           refreshData(signer)
-        }              
+        }             
       }catch (error) {
         console.log (error);
         try {
@@ -288,7 +290,7 @@ function Card({
                   APR
                 </div>
               </div>
-              <Progress color="#ffffff" completed={(parseFloat(poolData.currentPoolSize)* 100)/parseFloat(poolData.maxPoolSize)} height={30} data-label={`${(parseFloat(poolData.currentPoolSize)* 100)/parseFloat(poolData.maxPoolSize)}% Pool Filled`} />
+              <Progress color="#20A7DB" completed={(parseFloat(poolData.currentPoolSize)* 100)/parseFloat(poolData.maxPoolSize)} height={20} data-label={`${(parseFloat(poolData.currentPoolSize)* 100)/parseFloat(poolData.maxPoolSize)}% Pool Filled`} />
               <div className='home__cardDesc'>
                 <div className='home__descOption'>
                   <div className='home__descTitle'>Reward Token</div>
@@ -296,6 +298,14 @@ function Card({
                    <p style={{fontSize: "10px"}}>{tokenDetails.rewardTokenSymbol}</p>
                    <img src={light} alt='light' /> 
                   </div>
+                </div>
+                <div className='home__descOption'>
+                  <div className='home__descTitle'>Max Contribution</div>
+                  <div className='home__descValue'>{(poolData.maxContribution).toString()}</div>
+                </div>
+                <div className='home__descOption'>
+                  <div className='home__descTitle'>Max Pool Size</div>
+                  <div className='home__descValue'>{(poolData.maxPoolSize).toString()}</div>
                 </div>
                 <div className='home__descOption'>
                   <div className='home__descTitle'>Value Locked</div>
@@ -330,7 +340,7 @@ function Card({
               unlockTime={unlockTime}
               myTokenBalance={myTokenBalance}
               stakeTokens = {stakeTokens}
-              unstakeToken = {unstakeTokens}
+              unstakeTokens = {unstakeTokens}
               emergencyWithdraw = {emergencyWithdraw}
               tokenDetails = {tokenDetails}
               poolData = {poolData}

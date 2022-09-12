@@ -48,6 +48,7 @@ function HomePage() {
   const [claimableTokens, setClaimableTokens] = useState(0)
   const [poolLength, setpoolLength] = useState(null)
   const [poolDetails, setPoolDetails] = useState([])
+  const [allCurrentPoolSize, setTotalPoolSize] = useState()
   // let poolDetails = []
 
   const staking = new ethers.Contract(
@@ -55,6 +56,16 @@ function HomePage() {
     stakingAbi,
     provider,
   )
+
+//   let totalCurrentPoolSize = 0;
+
+//   if(poolDetails.length > 0){
+//   poolDetails.forEach(element => {
+//     totalCurrentPoolSize = totalCurrentPoolSize + element.value.currentPoolSize;
+// });
+//   setTotalPoolSize(totalCurrentPoolSize)
+
+// }
 
 
 
@@ -77,6 +88,8 @@ function HomePage() {
     let _poolDetails = [];
     for (let i = 0; i < await getPoolLength(); i++) {
       _poolDetails.push(getPoolInfo(i));
+      
+
     }
     _poolDetails = (await Promise.allSettled(_poolDetails));
     console.log("poolDetails array", _poolDetails);
@@ -98,11 +111,12 @@ function HomePage() {
 
       const currentpoolsize = await _poolInfo.currentPoolSize.toString()
       const maxcontribution = await _poolInfo.maxContribution.toString()
-      const maxpool = await _poolInfo.maxPoolSize.toString()
+
+
+     const maxpool = await _poolInfo.maxPoolSize.toString()
       poolData.maxContribution = Math.floor(ethers.utils.formatUnits(maxcontribution, decimals))
       poolData.currentPoolSize = Math.floor(ethers.utils.formatUnits(currentpoolsize, decimals));
       poolData.maxPoolSize = ethers.utils.formatUnits(maxpool, decimals);
-      
       poolData.emergencywithdrawfee = await _poolInfo.emergencyFees.toString()
       poolData.rewardNum = await _poolInfo.rewardNum.toString()
       poolData.rewardDen = await _poolInfo.rewardDen.toString()
@@ -153,9 +167,9 @@ function HomePage() {
         <div className='home__topSub'>
           <div className='home__topLeft'>
             <div className='home__topTitle'>Provide Liquidity, Earn FTR</div>
-            <div className='home__topAmount'>$105,786,890.44</div>
-            <div className='home__topDesc'>Total Value Locked(TVL)</div>
-            <div className='home__topSearch'>
+            <div className='home__topAmount'>{allCurrentPoolSize}</div>
+            <div className='home__topDesc'>Total Token Locked(TVL)</div>
+            {/* <div className='home__topSearch'>
               <div className='home__topSearchBox'>
                 <div className='home__topSearchIcon'>
                   <img src={search} alt='sandclock'/>
@@ -170,7 +184,7 @@ function HomePage() {
               <div className='home__topSearchButton'>
                 Search
               </div>
-            </div>
+            </div> */}
           </div>
           <div className='home__topRight'>
             <div className='home__topImg'>

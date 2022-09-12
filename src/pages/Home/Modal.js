@@ -96,7 +96,7 @@ function Modal({
               </div>
               <div className='modal__value'>
               <input 
-              type = "text" 
+              type = "number" 
               placeholder="Input amount" 
               className= 'modal__input'
               // value = {addressInput}
