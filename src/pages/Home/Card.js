@@ -33,6 +33,9 @@ function Card({
 
     let token;
 
+
+    
+
     function refreshData (signer) {
       if(signer){
         staking = new ethers.Contract(value.stakingAddress, stakingAbi, signer);
@@ -107,9 +110,9 @@ function Card({
         }catch (error) {
           console.log (error);
           try {
-            setError(error.error.data.message)
+            alert(error.error.message)
           } catch {
-            setError("Something went wrong, please try again!")
+            alert("Something went wrong, please try again!")
           }
         }
       }
@@ -127,11 +130,11 @@ function Card({
           console.log ("Emergency Withdraw Tx Receipt: ", reciept);
           refreshData(signer)
         }catch (error) {
-          console.log ("eeoeoeo", error.toString());
+          console.log (error.toString());
           try {
-            setError(error.error.data.message)
+            alert(error.error.message)
           } catch {
-            setError("Something went wrong, please try again!")
+            alert("Something went wrong, please try again!")
           }
 
         }
@@ -220,9 +223,9 @@ function Card({
       }catch (error) {
         console.log (error);
         try {
-          setError(error.error.data.message)
+          alert(error.error.message)
         } catch {
-          setError("Something went wrong, please try again!")
+          alert("Something went wrong, please try again!")
         }
       }
     }

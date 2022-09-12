@@ -57,15 +57,23 @@ function HomePage() {
     provider,
   )
 
-//   let totalCurrentPoolSize = 0;
 
-//   if(poolDetails.length > 0){
-//   poolDetails.forEach(element => {
-//     totalCurrentPoolSize = totalCurrentPoolSize + element.value.currentPoolSize;
-// });
-//   setTotalPoolSize(totalCurrentPoolSize)
 
-// }
+  let totalCurrentPoolSize = 0;
+
+
+useEffect(() => {
+
+  if(poolDetails.length > 0){
+    poolDetails.forEach(element => {
+      totalCurrentPoolSize = totalCurrentPoolSize + element.value.currentPoolSize;
+  });
+  setTotalPoolSize(totalCurrentPoolSize)
+
+}
+
+
+}, [poolDetails])
 
 
 

@@ -13,14 +13,35 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 
 function App() {
 
+
+  const BSCchain = {
+    id: 56,
+    name: "BSC",
+    network: "BSC",
+    iconUrl: "https://www.logo.wine/a/logo/Binance/Binance-Icon-Logo.wine.svg",
+    iconBackground: "#fff",
+    nativeCurrency: {
+      decimals: 18,
+      name: "Binance Smart Chain",
+      symbol: "BNB",
+    },
+    rpcUrls: {
+      default: "https://bsc-dataseed.binance.org/",
+    },
+    blockExplorers: {
+      default: { name: "BscScan", url: "https://bscscan.com" },
+      etherscan: { name: "BscScan", url: "https://bscscan.com" },
+    },
+    testnet: false,
+  };
   
   const { chains, provider } = configureChains(
-    [ chain.rinkeby, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+    [ BSCchain, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
     [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
   );
 
   const { connectors } = getDefaultWallets({
-    appName: "baby-cracken",
+    appName: "Decentralised United",
     chains,
   });
   const wagmiClient = createClient({
