@@ -7,6 +7,11 @@ body{
   background-color: #02050e;
   color: white;
 }
+
+
+iframe{
+  display: none !important;
+}
 .circle-left {
   position: absolute;
   z-index: 0;
