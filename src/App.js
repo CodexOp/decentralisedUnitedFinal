@@ -9,6 +9,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { darkTheme } from "@rainbow-me/rainbowkit";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import Footer from './components/Footer/Footer';
 
 
 function App() {
@@ -60,7 +61,7 @@ function App() {
           <Router>
             <div>
               <Routes>
-                <Route exact path="/" element={<Home />} />
+                <Route exact path="/" element={<><Home /><Footer /></>} />
               </Routes>
             </div>
           </Router>

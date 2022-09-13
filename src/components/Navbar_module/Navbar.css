@@ -14,6 +14,15 @@ html {
 }
 
 
+.button div button{
+  display: block;
+  margin-right: 10px !important;
+}
+
+
+
+
+
 .button div button {
   text-align: center !important;
   font-size: 14px !important;

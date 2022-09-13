@@ -139,7 +139,12 @@ const [active, setActive] = useState("1");
       </div>
        <div className="button">
         {/* <button className="contact-btn">connect wallet</button> */}
-        <ConnectButton/>
+        <ConnectButton accountStatus={{
+    smallScreen: 'full',
+    largeScreen: 'full',
+  }}
+  
+  chainStatus="none"/>
         <div className="ham">
           <GiHamburgerMenu onClick={() => setOpen(!isOpen)} />
         </div>
