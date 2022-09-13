@@ -326,6 +326,10 @@ function Card({
                   <div className='home__descTitle'>My Reward</div>
                   <div className='home__descValue'>{claimableTokens} {tokenDetails.rewardTokenSymbol} <img className='home__descGift' src={gift} alt='gift'/> </div>
                 </div>
+                <div className='home__descOption'>
+                  <div className='home__descTitle'>Lock Time</div>
+                  <div className='home__descValue'>{poolData.lockDays + ` Days`} <img className='home__descGift' src={gift} alt='gift'/> </div>
+                </div>
               </div>
               <div className={'home__cardButton '+(poolData.poolActive ? '' : 'home--ended')} onClick={() => setIsOpen(true)}>
               { poolData.poolActive ? "Stake" : "Ended"}
