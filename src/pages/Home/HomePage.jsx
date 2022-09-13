@@ -51,11 +51,7 @@ function HomePage() {
   const [allCurrentPoolSize, setTotalPoolSize] = useState()
   // let poolDetails = []
 
-  const staking = new ethers.Contract(
-    value.stakingAddress,
-    stakingAbi,
-    provider,
-  )
+  let staking;
 
 
 
@@ -78,6 +74,11 @@ useEffect(() => {
 
 
   function refreshData (signer) {
+    staking = new ethers.Contract(
+      value.stakingAddress,
+      stakingAbi,
+      provider,
+    )
     if(signer){
       signer.getAddress().then((res)=>{setMyaddress(res)})
       // getUserInfo()
@@ -88,8 +89,8 @@ useEffect(() => {
       // checkApproved()
       // getClaimableTokens()
       // getPoolLength()
-      getPoolArray()
     }
+    getPoolArray()
   }
 
   async function getPoolArray(){
