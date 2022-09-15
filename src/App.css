@@ -9,9 +9,7 @@ body{
 }
 
 
-iframe{
-  display: none !important;
-}
+
 .circle-left {
   position: absolute;
   z-index: 0;

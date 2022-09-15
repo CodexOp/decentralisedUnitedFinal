@@ -29,6 +29,7 @@ function Modal({
 
   const [Active, setActive] = useState(true);
   const [perActive,setperActive] = useState("25")
+  const [showAlert,setShowAlert] = useState(false)
 
   const [istokenapproved, settokenapproved] = useState(false)
 
@@ -165,11 +166,12 @@ function Modal({
                 <div className={'modal__percentOption ' +  (perActive == "100" ? 'modal--perActive' : '')} onClick={()=>setperActive("100")}>100%</div>
               </div> */}
 
+              {showAlert ? <div className="unstake_alert">Emergency Withdraw Can Lead To Lose Of All The Rewards And 15% Of Your Capital</div> : <div></div>}
               <div className='modal__buttonBar'>
                 <div className='modal__Button modal__us' onClick={unstakeTokens}>
                   Unstake
                 </div>
-                <div className='modal__Button modal__ew' onClick={emergencyWithdraw}>
+                <div className='modal__Button modal__ew' onClick={() => { setShowAlert(true);  emergencyWithdraw()}}>
                   Emergency Withdraw
                 </div>
               </div>

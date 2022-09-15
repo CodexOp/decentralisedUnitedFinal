@@ -142,9 +142,7 @@ const [active, setActive] = useState("1");
         <ConnectButton accountStatus={{
     smallScreen: 'full',
     largeScreen: 'full',
-  }}
-  
-  chainStatus="none"/>
+  }} chainStatus="none"/>
         <div className="ham">
           <GiHamburgerMenu onClick={() => setOpen(!isOpen)} />
         </div>
