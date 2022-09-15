@@ -108,9 +108,9 @@ function Card({
           console.log ("Unstake Tx Receipt: ", reciept);
           refreshData(signer)
         }catch (error) {
-          console.log (error);
+          console.log (error.error.data.message);
           try {
-            alert(error.error.message)
+            alert(error.error.data.message)
           } catch {
             alert("Something went wrong, please try again!")
           }
@@ -132,7 +132,7 @@ function Card({
         }catch (error) {
           console.log (error.toString());
           try {
-            alert(error.error.message)
+            alert(error.error.data.message)
           } catch {
             alert("Something went wrong, please try again!")
           }
@@ -223,7 +223,7 @@ function Card({
       }catch (error) {
         console.log (error);
         try {
-          alert(error.error.message)
+          alert(error.error.data.message)
         } catch {
           alert("Something went wrong, please try again!")
         }
