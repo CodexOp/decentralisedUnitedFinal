@@ -25,11 +25,13 @@ function Modal({
   tokenDetails,
   poolData,
   mystakebalance,
+  errors
   }) {
 
   const [Active, setActive] = useState(true);
   const [perActive,setperActive] = useState("25")
   const [showAlert,setShowAlert] = useState(false)
+  const [showerror,setShowError] = useState(false)
 
   const [istokenapproved, settokenapproved] = useState(false)
 
@@ -110,6 +112,8 @@ function Modal({
               <div className='modal__descTitle'>Lock Period</div>
               <div className='modal__descValue modal--val'>{locktime.toString()}</div>
             </div>
+            {errors ? <div className="unstake_alert">{errors}</div> : <div></div>}
+
           </div>
           <div
             className={'modal__cardButton ' + (Active

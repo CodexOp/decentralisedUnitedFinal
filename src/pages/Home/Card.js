@@ -15,7 +15,7 @@ import tokens from '../../tokens.json'
 
 function Card({ 
   index,
-  poolData
+  poolData,
   }) {
     const { data: signer, isError, isLoading } = useSigner()
     const [mystakebalance, setMystakeBalance] = useState()
@@ -110,9 +110,9 @@ function Card({
         }catch (error) {
           console.log (error.error.data.message);
           try {
-            alert(error.error.data.message)
+            setError(error.error.data.message)
           } catch {
-            alert("Something went wrong, please try again!")
+            setError("Something went wrong, please try again!")
           }
         }
       }
@@ -132,9 +132,9 @@ function Card({
         }catch (error) {
           console.log (error.toString());
           try {
-            alert(error.error.data.message)
+            setError(error.error.data.message)
           } catch {
-            alert("Something went wrong, please try again!")
+            setError("Something went wrong, please try again!")
           }
 
         }
@@ -209,7 +209,7 @@ function Card({
         const token = new ethers.Contract(poolData.tokenAddress, tokenAbi, signer);
 
         if(amount === undefined){
-          alert("Enter Amount First")
+          setError("Enter Amount First")
         }
         else{
           await approve()
@@ -223,14 +223,14 @@ function Card({
       }catch (error) {
         console.log (error);
         try {
-          alert(error.error.data.message)
+          setError(error.error.data.message)
         } catch {
-          alert("Something went wrong, please try again!")
+          setError("Something went wrong, please try again!")
         }
       }
     }
     else{
-      alert('Your Wallet Is Not Witelisted For Staking')
+      setError('Your Wallet Is Not Witelisted For Staking')
     }
   }
 
@@ -245,7 +245,7 @@ function Card({
         console.log ("Approve Tx Receipt: ", reciept);
       }catch (error) {
         console.log (error);
-        // alert(error.data.message);
+        // setError(error.data.message);
       }
     }
     else{
@@ -352,6 +352,7 @@ function Card({
               tokenDetails = {tokenDetails}
               poolData = {poolData}
               mystakebalance = {mystakebalance}
+              errors = {errors}
               // unlockTime={unlockTime}
               />}
             </div>
