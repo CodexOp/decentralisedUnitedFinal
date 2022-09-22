@@ -36,29 +36,29 @@ function App() {
     testnet: false,
   };
 
-  const BSCTestnetChain = {
-    id: 97,
-    name: "BSC test",
-    network: "BSC test",
+  const polygonTest = {
+    id: 80001,
+    name: "maticmum",
+    network: "Mumbai Testnet",
     iconUrl: "https://www.logo.wine/a/logo/Binance/Binance-Icon-Logo.wine.svg",
     iconBackground: "#fff",
     nativeCurrency: {
       decimals: 18,
-      name: "Binance Smart Chain",
-      symbol: "BNB",
+      name: "polygon mumbai",
+      symbol: "MATIC",
     },
     rpcUrls: {
-      default: "https://bsc.getblock.io/testnet/?api_key=79ba2a2d-6b28-46a6-a7eb-9f239cb09771",
+      default: "https://rpc-mumbai.maticvigil.com",
     },
     blockExplorers: {
-      default: { name: "SnowTrace", url: "https://bscscan.com" },
-      etherscan: { name: "SnowTrace", url: "https://bscscan.com" },
+      default: { name: "SnowTrace", url: "https://polygonscan.com" },
+      etherscan: { name: "SnowTrace", url: "https://polygonscan.com" },
     },
     testnet: true,
   };
   
   const { chains, provider } = configureChains(
-    [ BSCchain, chain.polygonMumbai, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+    [ polygonTest, BSCchain, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
     [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
   );
 

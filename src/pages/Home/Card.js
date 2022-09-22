@@ -11,7 +11,7 @@ import {useSigner, useProvider} from 'wagmi'
 import { ethers } from 'ethers';
 import Modal from './Modal'
 import Progress from 'react-progressbar';
-import tokens from '../../tokens.json'
+import tokens from '../../tokens.json';
 
 function Card({ 
   index,
@@ -63,6 +63,14 @@ function Card({
         // getPoolArray()
       }
     }
+
+    useEffect(()=>{
+      var totalStakeds = 0;
+      for(let i=0; i<userAllInfo.amounts.length; i++){
+         totalStakeds += parseInt(userAllInfo.amounts[i])
+         setMystakeBalance(totalStakeds);
+      }
+    },[userAllInfo])
 
     useEffect( ()=>{
       refreshData(signer)
@@ -259,6 +267,7 @@ function Card({
       }catch (error) {
         console.log (error);
         try {
+          console.log (error);
           setError(error.error.data.message)
         } catch {
           setError("Something went wrong, please try again!")
@@ -389,7 +398,10 @@ function Card({
               poolData = {poolData}
               mystakebalance = {mystakebalance}
               errors = {errors}
+              userAllInfo = {userAllInfo}
+              setError = {setError}
               // unlockTime={unlockTime}
+
               />}
             </div>
   )

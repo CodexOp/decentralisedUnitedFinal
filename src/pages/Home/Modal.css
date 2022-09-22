@@ -22,9 +22,16 @@
 
 }
 
+.stakedOption{
+  background: #112037;
+  border: none;
+  color: #fff;
+  padding: 8px;
+}
+
 .modal__card {
 width: 445px;
-height: 519px;
+height: 550px;
 display: flex;
 position: relative;
   align-items: center;

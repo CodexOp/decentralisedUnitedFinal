@@ -6,8 +6,24 @@ import electro from '../../images/electro.png'
 import CloseIcon from '@mui/icons-material/Close';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import tokens from '../../tokens.json'
+import Countdown from "react-countdown";
 
 
+
+// Renderer callback with condition
+const renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    // Render a complete state
+    return <></>;
+  } else {
+    // Render a countdown
+    return (
+      <span>
+        {hours}:{minutes}:{seconds}
+      </span>
+    );
+  }
+};
 
 function Modal({
   setIsOpen,
@@ -25,17 +41,35 @@ function Modal({
   tokenDetails,
   poolData,
   mystakebalance,
-  errors
+  errors,
+  userAllInfo
   }) {
-
+console.log(userAllInfo)
   const [Active, setActive] = useState(true);
   const [perActive,setperActive] = useState("25")
   const [showAlert,setShowAlert] = useState(false)
   const [showerror,setShowError] = useState(false)
+  const [indexValue,setIndexValue] = useState(0)
+  const [TotalStaked,setTotalStaked] = useState()
+  const [timerTime, setTimertime] = useState()
 
   const [istokenapproved, settokenapproved] = useState(false)
 
   const [apy, setApy] = useState(0);
+ 
+  useEffect(()=>{
+    setTotalStaked(mystakebalance)
+
+  },[])
+
+  useEffect(()=>{
+    setTimertime(userAllInfo.timers[indexValue])
+  },[userAllInfo, timerTime, indexValue])
+
+  const optionChange = (e) => {
+    console.log(e.target.value)
+    setIndexValue(e.target.value)
+  }
       
   return (
     <div className='modal__background'>
@@ -72,15 +106,7 @@ function Modal({
               {tokens[index].apy}%
               </div>
             </div>
-            <div className='modal__descOption'>
-              <div className='modal__descTitle'>Claimable Rewards</div>
-              <div className='modal__descValue'>
-                <span className='modal__val modal--val'>
-                {parseFloat(claimableTokens).toFixed(2)}
-                </span>
-                </div>
-            </div>
-            <div className='modal__descOption'>
+                <div className='modal__descOption'>
               <div className='modal__descTitle'>Stake</div>
               <div className='modal__descValue'>Available : {myTokenBalance}</div>
             </div>
@@ -88,13 +114,6 @@ function Modal({
               <div className='modal__selectBox'>
                 <form>
                   <label htmlFor="cars" className='modal__selectLabel'>{tokenDetails.rewardTokenSymbol}</label>
-                  <select className='modal__selectDrop' id="cars" name="cars">
-                    <option></option>
-                    {/* <option value="volvo">Volvo</option>
-                    <option value="saab">Saab</option>
-                    <option value="fiat">Fiat</option>
-                    <option value="audi">Audi</option> */}
-                  </select>
                 </form>
               </div>
               <div className='modal__value'>
@@ -136,29 +155,44 @@ function Modal({
                 <div className='modal__usInfo modal__usVal'>
                 <div className='modal__usOption'><img className='modal__electro' src={electro} alt='light'/>FTR</div>
                 <div className='modal__usOption'>{tokens[index].apy}%</div>
-                  <div className='modal__usOption'>{parseFloat(claimableTokens).toFixed(2)} {tokenDetails.rewardTokenSymbol} </div>
+                  <div className='modal__usOption'>{userAllInfo.claimableTokens[indexValue]} {tokenDetails.rewardTokenSymbol} </div>
                 </div>
               </div>
               
               <div className='modal__usDesc'>
+              <select onChange={optionChange} className="stakedOption">
+
+                {userAllInfo.amounts.map((values, index)=>{
+                  return(
+                    <option key={index} value={index} >Stake {index+1}</option>
+                  );
+                })}
+                  </select>
+                  <div className='modal__descOption'>
+              <div className='modal__descTitle'>My Staked Token</div>
+              <div className='modal__descValue'>{userAllInfo.amounts[indexValue]}</div>
+                </div>
+                  <div className='modal__descOption'>
+              <div className='modal__descTitle'>Total Amount Staked</div>
+              <div className='modal__descValue'>{TotalStaked}</div>
+                </div>
+    
             <div className='modal__descOption'>
               <div className='modal__descTitle'>Unstaked Fee</div>
               <div className='modal__descValue'>{poolData.emergencywithdrawfee}%</div>
                 </div>
                 <div className='modal__descOption'>
-              <div className='modal__descTitle'>Unlock Date/Time</div>
-              <div className='modal__descValue'>{unlockTime}</div>
+              <div className='modal__descTitle'>Unlock Time Remaining</div>
+              <div className='modal__descValue'>{timerTime && timerTime < 0 ? <span>You can unstake now</span> : <Countdown date={Date.now() + timerTime} renderer={renderer} /> }</div>
                 </div>
-                <div className='modal__descOption'>
-              <div className='modal__descTitle'>My Staked Tokens</div>
-              <div className='modal__descValue'>{mystakebalance}</div>
-              </div>
+                {errors ? <div className="unstake_alert">{errors}</div> : <div></div>}
+
               </div>
 
               <div className='modal__descBar'>
         
                   <div className='modal__usLabel'>{tokenDetails.rewardTokenSymbol}</div>
-            
+
               <div className='modal__value'>
                 {parseFloat(claimableTokens).toFixed(2)}        </div>
               </div>
@@ -170,12 +204,13 @@ function Modal({
                 <div className={'modal__percentOption ' +  (perActive == "100" ? 'modal--perActive' : '')} onClick={()=>setperActive("100")}>100%</div>
               </div> */}
 
+
               {showAlert ? <div className="unstake_alert">Emergency Withdraw Can Lead To Lose Of All The Rewards And 15% Of Your Capital</div> : <div></div>}
               <div className='modal__buttonBar'>
-                <div className='modal__Button modal__us' onClick={()=> unstakeTokens(0)}>
+                <div className='modal__Button modal__us' onClick={()=> unstakeTokens(indexValue)}>
                   Unstake
                 </div>
-                <div className='modal__Button modal__ew' onClick={() => { setShowAlert(true);  emergencyWithdraw(0)}}>
+                <div className='modal__Button modal__ew' onClick={() => { setShowAlert(true);  emergencyWithdraw(indexValue)}}>
                   Emergency Withdraw
                 </div>
               </div>
