@@ -28,6 +28,13 @@ function Card({
     const [tokenDetails, setTokenDetails] = useState({})
     const [amount, setAmount] = useState(Number)
     const [errors, setError] = useState()
+    const [userAllInfo, setUserAllInfo] = useState({
+      amounts: [],
+      stakingTimes: [],
+      unlockTimes: [],
+      timers: [],
+      claimableTokens: [],
+    })
 
     let staking;
 
@@ -45,8 +52,8 @@ function Card({
         // signer.getAddress().then((res)=>{setMyaddress(res)})
         getTokenDetails ();
         getUserInfo()
-        getClaimableTokens()
-        getUserLockTime()
+        getClaimableTokens(0)
+        getUserLockTime(0)
         // getUserLockTime()
         getTokenBalance()
         getWhiteListAddresses()
@@ -77,8 +84,36 @@ function Card({
       try{
         let _userInfo = await staking.userInfo(index, await signer.getAddress());
         let decimals = (await token.decimals()).toString();
-        console.log ("my stake token amount: ", ethers.utils.formatUnits(_userInfo.amount.toString(), decimals));
-        setMystakeBalance(ethers.utils.formatUnits(_userInfo.amount.toString(), decimals));
+        let _stakingAmounts = await staking.getUserStakingAmount(index, await signer.getAddress());
+        let _stakingTimes = await staking.getUserStakingTime(index, await signer.getAddress());
+        console.log ("USER info", _stakingAmounts, _stakingTimes);
+
+        let obj = {
+          amounts: [],
+          stakingTimes: [],
+          unlockTimes: [],
+          timers: [],
+          claimableTokens: [],
+        };
+        for (let i=0; i<_stakingAmounts.length; i++){
+          obj.amounts.push(ethers.utils.formatUnits(_stakingAmounts[i], decimals));
+          obj.stakingTimes.push((_stakingTimes[i]).toString());
+        }
+        var timestamp = new Date().getTime();
+        console.log ("timestamp", timestamp);
+        for (let i=0; i<_stakingTimes.length; i++){
+          let unlockTime = await staking.getUserLockTime(index, await signer.getAddress(), i);
+          obj.unlockTimes.push(unlockTime.toString());
+          unlockTime = parseInt(unlockTime.toString())*1000;
+          obj.timers.push(unlockTime - timestamp);
+
+          let claimableToken = await staking.claimableRewards(index, await signer.getAddress(), i);
+          obj.claimableTokens.push(ethers.utils.formatUnits(claimableToken, decimals));
+        }
+        setUserAllInfo(obj);
+        
+        // console.log ("my stake token amount: ", ethers.utils.formatUnits(_userInfo.amount.toString(), decimals));
+        // setMystakeBalance(ethers.utils.formatUnits(_userInfo.amount.toString(), decimals));
       }catch(err){
         console.log("User error", err);
       }
@@ -100,15 +135,16 @@ function Card({
       }
     }
 
-      async function unstakeTokens () {
+      async function unstakeTokens (stakingNumber) {
         try{
           let staking = new ethers.Contract(value.stakingAddress, stakingAbi, signer);
-          let tx = await staking.unstakeTokens(index);
+          console.log (index)
+          let tx = await staking.unstakeTokens(index, stakingNumber);
           let reciept = await tx.wait();
           console.log ("Unstake Tx Receipt: ", reciept);
           refreshData(signer)
         }catch (error) {
-          console.log (error.error.data.message);
+          console.log (error);
           try {
             setError(error.error.data.message)
           } catch {
@@ -117,7 +153,7 @@ function Card({
         }
       }
     
-      async function emergencyWithdraw () {
+      async function emergencyWithdraw (stakingNumber) {
         try{
           const _staking = new ethers.Contract(
             value.stakingAddress,
@@ -125,7 +161,7 @@ function Card({
             signer,
           )
           
-          let tx = await _staking.emergencyWithdraw(index);
+          let tx = await _staking.emergencyWithdraw(index, stakingNumber);
           let reciept = await tx.wait();
           console.log ("Emergency Withdraw Tx Receipt: ", reciept);
           refreshData(signer)
@@ -149,10 +185,10 @@ function Card({
       setMyTokenBalance(Math.floor(tokenbalanceConverted))
     }
 
-    async function getUserLockTime (){
+    async function getUserLockTime (stakingNumber){
     try{
       let userAddress = await signer.getAddress()
-      let myunlocktime = await staking.getUserLockTime(index, userAddress);
+      let myunlocktime = await staking.getUserLockTime(index, userAddress, stakingNumber);
       let _wallet = await signer.getAddress();      
       let _userInfo = await staking.userInfo( index, _wallet);
       let _stakedAmount = ethers.utils.formatEther(_userInfo.amount.toString());
@@ -189,10 +225,10 @@ function Card({
     }
   }
 
-  async function getClaimableTokens () {
+  async function getClaimableTokens (stakingNumber) {
     try {
       let userAddress = await signer.getAddress();
-      let _claimableTokens = await staking.claimableRewards(index, userAddress);
+      let _claimableTokens = await staking.claimableRewards(index, userAddress, stakingNumber);
       const rewardToken = new ethers.Contract(poolData.rewardTokenAddress, tokenAbi, signer);
       const decimals = (await rewardToken.decimals()).toString();
       console.log("Claimable Tokens: ", _claimableTokens.toString());

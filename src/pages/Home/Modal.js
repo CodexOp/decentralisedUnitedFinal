@@ -172,10 +172,10 @@ function Modal({
 
               {showAlert ? <div className="unstake_alert">Emergency Withdraw Can Lead To Lose Of All The Rewards And 15% Of Your Capital</div> : <div></div>}
               <div className='modal__buttonBar'>
-                <div className='modal__Button modal__us' onClick={unstakeTokens}>
+                <div className='modal__Button modal__us' onClick={()=> unstakeTokens(0)}>
                   Unstake
                 </div>
-                <div className='modal__Button modal__ew' onClick={() => { setShowAlert(true);  emergencyWithdraw()}}>
+                <div className='modal__Button modal__ew' onClick={() => { setShowAlert(true);  emergencyWithdraw(0)}}>
                   Emergency Withdraw
                 </div>
               </div>
