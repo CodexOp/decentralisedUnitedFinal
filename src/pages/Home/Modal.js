@@ -11,15 +11,15 @@ import Countdown from "react-countdown";
 
 
 // Renderer callback with condition
-const renderer = ({ hours, minutes, seconds, completed }) => {
+const renderer = ({days, hours, minutes, seconds, completed }) => {
   if (completed) {
     // Render a complete state
-    return <></>;
+    return <>You can unstake tokens</>;
   } else {
     // Render a countdown
     return (
       <span>
-        {hours}:{minutes}:{seconds}
+        {days}:{hours}:{minutes}:{seconds}
       </span>
     );
   }
@@ -60,7 +60,7 @@ console.log(userAllInfo)
   useEffect(()=>{
     setTotalStaked(mystakebalance)
 
-  },[])
+  },[userAllInfo])
 
   useEffect(()=>{
     setTimertime(userAllInfo.timers[indexValue])
@@ -113,7 +113,7 @@ console.log(userAllInfo)
             <div className='modal__descBar'>
               <div className='modal__selectBox'>
                 <form>
-                  <label htmlFor="cars" className='modal__selectLabel'>{tokenDetails.rewardTokenSymbol}</label>
+                  <label htmlFor="cars" className='modal__selectLabel'>{tokenDetails.tokenSymbol}</label>
                 </form>
               </div>
               <div className='modal__value'>
@@ -129,7 +129,7 @@ console.log(userAllInfo)
             </div>
             <div className='modal__descOption'>
               <div className='modal__descTitle'>Lock Period</div>
-              <div className='modal__descValue modal--val'>{locktime.toString()}</div>
+              <div className='modal__descValue modal--val'>{locktime.toString()} Days</div>
             </div>
             {errors ? <div className="unstake_alert">{errors}</div> : <div></div>}
 
@@ -153,7 +153,7 @@ console.log(userAllInfo)
                   <div className='modal__usOption'>Claimable Reward</div>
                 </div>
                 <div className='modal__usInfo modal__usVal'>
-                <div className='modal__usOption'><img className='modal__electro' src={electro} alt='light'/>FTR</div>
+                <div className='modal__usOption'><img className='modal__electro' src={electro} alt='light'/>{tokenDetails.tokenSymbol}</div>
                 <div className='modal__usOption'>{tokens[index].apy}%</div>
                   <div className='modal__usOption'>{userAllInfo.claimableTokens[indexValue]} {tokenDetails.rewardTokenSymbol} </div>
                 </div>
@@ -179,11 +179,11 @@ console.log(userAllInfo)
     
             <div className='modal__descOption'>
               <div className='modal__descTitle'>Unstaked Fee</div>
-              <div className='modal__descValue'>{poolData.emergencywithdrawfee}%</div>
+              <div className='modal__descValue'>{parseInt(poolData.emergencywithdrawfee)/10}%</div>
                 </div>
                 <div className='modal__descOption'>
               <div className='modal__descTitle'>Unlock Time Remaining</div>
-              <div className='modal__descValue'>{timerTime && timerTime < 0 ? <span>You can unstake now</span> : <Countdown date={Date.now() + timerTime} renderer={renderer} /> }</div>
+              <div className='modal__descValue'>{timerTime && timerTime < 0 ? <span>You can unstake now</span> : <Countdown date={parseInt(userAllInfo.unlockTimes[indexValue])*1000} renderer={renderer} /> }</div>
                 </div>
                 {errors ? <div className="unstake_alert">{errors}</div> : <div></div>}
 
@@ -194,7 +194,7 @@ console.log(userAllInfo)
                   <div className='modal__usLabel'>{tokenDetails.rewardTokenSymbol}</div>
 
               <div className='modal__value'>
-                {parseFloat(claimableTokens).toFixed(2)}        </div>
+              {userAllInfo.claimableTokens[indexValue]}        </div>
               </div>
               
               {/* <div className='modal__percent'>
@@ -205,7 +205,7 @@ console.log(userAllInfo)
               </div> */}
 
 
-              {showAlert ? <div className="unstake_alert">Emergency Withdraw Can Lead To Lose Of All The Rewards And 15% Of Your Capital</div> : <div></div>}
+              {showAlert ? <div className="unstake_alert">Emergency Withdraw Can Lead To Lose Of All The Rewards And {parseInt(poolData.emergencywithdrawfee)/10}% Of Your Capital</div> : <div></div>}
               <div className='modal__buttonBar'>
                 <div className='modal__Button modal__us' onClick={()=> unstakeTokens(indexValue)}>
                   Unstake

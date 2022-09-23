@@ -44,6 +44,7 @@ function Card({
     
 
     function refreshData (signer) {
+      setError("")
       if(signer){
         staking = new ethers.Contract(value.stakingAddress, stakingAbi, signer);
         token = new ethers.Contract(poolData.tokenAddress, tokenAbi, signer);
@@ -94,7 +95,6 @@ function Card({
         let decimals = (await token.decimals()).toString();
         let _stakingAmounts = await staking.getUserStakingAmount(index, await signer.getAddress());
         let _stakingTimes = await staking.getUserStakingTime(index, await signer.getAddress());
-        console.log ("USER info", _stakingAmounts, _stakingTimes);
 
         let obj = {
           amounts: [],
@@ -109,6 +109,10 @@ function Card({
         }
         var timestamp = new Date().getTime();
         console.log ("timestamp", timestamp);
+
+        const rewardToken = new ethers.Contract(poolData.rewardTokenAddress, tokenAbi, signer);
+        const rewardDecimals = (await rewardToken.decimals()).toString();
+
         for (let i=0; i<_stakingTimes.length; i++){
           let unlockTime = await staking.getUserLockTime(index, await signer.getAddress(), i);
           obj.unlockTimes.push(unlockTime.toString());
@@ -116,8 +120,9 @@ function Card({
           obj.timers.push(unlockTime - timestamp);
 
           let claimableToken = await staking.claimableRewards(index, await signer.getAddress(), i);
-          obj.claimableTokens.push(ethers.utils.formatUnits(claimableToken, decimals));
+          obj.claimableTokens.push(ethers.utils.formatUnits(claimableToken, rewardDecimals));
         }
+        console.log ("USER INFO", obj);
         setUserAllInfo(obj);
         
         // console.log ("my stake token amount: ", ethers.utils.formatUnits(_userInfo.amount.toString(), decimals));
