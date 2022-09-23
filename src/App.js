@@ -58,7 +58,7 @@ function App() {
   };
   
   const { chains, provider } = configureChains(
-    [ polygonTest, BSCchain, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
+    [BSCchain, chain.mainnet, chain.polygon, chain.optimism, chain.arbitrum],
     [alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }), publicProvider()]
   );
 

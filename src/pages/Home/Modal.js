@@ -60,7 +60,7 @@ console.log(userAllInfo)
   useEffect(()=>{
     setTotalStaked(mystakebalance)
 
-  },[userAllInfo])
+  },[userAllInfo, mystakebalance])
 
   useEffect(()=>{
     setTimertime(userAllInfo.timers[indexValue])
